@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threshold Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="menu-icon" onclick="toggleSidebar()">☰</div>
+
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <ul>
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#categories">Subject Data Categories</a></li>
+            <li><a href="#lowest">Lowest Thresholds</a></li>
+            <li><a href="#overall">Overall Average</a></li>
+            <li><a href="#subject">Average Per Subject</a></li>
+            <li><a href="#cross-check">Effects of Metadata</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h1>Threshold Analysis</h1>
+
+        <section id="summary">
+            <h2>Summary</h2>
+            <p>
+                This study investigates how signal uncertainty affects the detection 
+                of simple and complex visual patterns. Participants completed a 
+                two-interval forced-choice task, detecting either sinusoidal gratings 
+                or band-limited noise textures. Signal uncertainty was manipulated by 
+                presenting either a single signal type or one of five variations per 
+                trial. Additionally, noise was either fixed across trials or varied. 
+                Contrast thresholds were measured to assess detection performance under 
+                these conditions, providing insight into how uncertainty influences the 
+                perception of structured and complex patterns.
+            </p>
+        </section>
+
+        <section id="categories">
+            <h2>Subject Categories Based on Gender, Visual Acuity and Handedness.</h2>
+            <p>
+                Here, the participants have been categorised based on some of their 
+                metadata. This is to further analyse, later in the page, if they have 
+                any effect on their performance of the experiment.
+            </p>
+            <div class="table-container">
+                <h3>Gender</h3>
+                {{ gender_table|safe }}
+            </div>
+            <div class="table-container">
+                <h3>Handedness</h3>
+                {{ handedness_table|safe }}
+            </div>
+            <div class="table-container">
+                <h3>Age Group</h3>
+                {{ age_table|safe }}
+            </div>
+            <div class="table-container">
+                <h3>Visual Acuity</h3>
+                {{ acuity_table|safe }}
+            </div>
+            
+        </section>
+
+        <section id="lowest">
+            <h2>Subjects with the Lowest Thresholds</h2>
+            <p>
+                Here, I have graphed the average thresholds of the subjects with the lowest 
+                thresholds in the entire study. Something to note, these exlude the subjects 
+                that had only run through the experiment once in one noice condition as 
+                opposed to the required two in two consequtive days.
+            </p>
+            <div class="lowest-container">
+                <div class="table-container">
+                    {{ thresholds|safe }}
+                </div>
+                <div class="chart-container">
+                    <img src="data:image/png;base64,{{ plot_lowest }}" alt="Lowest Threshold Plot">
+                </div>
+            </div>
+
+        </section>
+
+        <section id="overall">
+            <h2>Overall Average Thresholds</h2>
+            <p>
+                Here is the threshold of all 21 subjects, based on 3 grating stimulus at 
+                grating = 1 (one grating used throughout), 3 grating stimulus at grating 
+                = 5 (one random out 5 each block), 3 tetxure stimulus at grating = 1 (one 
+                grating used throughout), 3 texture stimulus at grating = 5 (one random 
+                out 5 each block), all of the above when the noise condition is fixed and 
+                again when it is fixed.
+            </p>
+            <p>
+                There is the overall plot and then the best 2 out of 3 for each condition.
+            </p>
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ plot_overall }}" alt="Overall Threshold Plot">
+            </div>
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ plot_best_2 }}" alt="Best 2 of 3 Threshold Plot">
+            </div>
+        </section>
+
+        <section id="subject">
+            <h2>Average threshold Specific to Subjects</h2>
+            <p>
+                Here, there is the list of thresholds specific to each subject, based on their data.
+                Additionally, there is also a list to reflect their best 2 of 3 thresholds.
+            </p>
+            <div class="dropdown-container">
+                <select id="subjectDropdown">
+                    <option value="">Select a Subject</option>
+                    {% for subject in subjects %}
+                        <option value="{{ subject }}">{{ subject }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="chart-container">
+                <h3>General Thresholds</h3>
+                <img id="subjectGeneralPlot" src="" alt="Subject General Plot" style="display:none;">
+            </div>
+            <div class="chart-container">
+                <h3>Best 2 of 3 Thresholds</h3>
+                <img id="subjectBest2Plot" src="" alt="Subject Best 2 of 3 Plot" style="display:none;">
+            </div>
+            
+        </section>
+
+        <section id="cross-check">
+            <h2>Analysing If Metadata Has Any Effects On Thresholds</h2>
+            <p>
+                There is a theory that factors such as handedness can effect the way we 
+                percieve things, that is to say that it may have a role in the strategies 
+                in place for interpreting or understanding the things we see.
+            </p>
+            <p>
+                For the first section of this part, I will use the standard acceptable
+                visual acuity score, which is 20/20. I will compare the average threshold of 
+                subjects with a lower visual acuity, against the average threshold of subjects 
+                with an exact or higher. Similarly, for the second section, I will measure the 
+                the average threshold of subjects that are left handed against the average 
+                threshold of subjects that are right handed. The number varies rather widely 
+                however, 13 right handed and 5 left handed, so I wiil only use the top 3 of each.
+            </p>
+            <h3>Possible Effect of Visual Acuity</h3>
+            <div class="visual_acuity">
+                <div class="table-container">
+                    {{ acuity_counts|safe }}
+                </div>
+                <div class="chart-container">
+                    <img src="data:image/png;base64,{{ plot_low_acuity }}" alt="Thresholds for Lower (Better) Acuity Subjects">
+                </div>
+                <div class="chart-container">
+                    <img src="data:image/png;base64,{{ plot_high_acuity }}" alt="Thresholds for Higher (Worse) Acuity Subjects">
+                </div>
+            </div>
+            <h3>Possible Effect of Handedness</h3>
+            <div class="handedness">
+                <div class="table-container">
+                    {{ handedness_counts|safe }}
+                </div>
+                <div class="chart-container">
+                    <img src="data:image/png;base64,{{ plot_left_handed }}" alt="Left-Handed Average Thresholds">
+                </div>
+                <div class="chart-container">
+                    <img src="data:image/png;base64,{{ plot_right_handed }}" alt="Right-Handed Average Thresholds">
+                </div>
+            </div>
+        </section>
+        
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+    </script>
+
+    <script>
+        document.getElementById("subjectDropdown").addEventListener("change", function() {
+            var subject = this.value;
+            if (subject) {
+                fetch(`/subject_plot/${subject}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.plot_subject) {
+                        document.getElementById("subjectGeneralPlot").src = "data:image/png;base64," + data.plot_subject;
+                        document.getElementById("subjectGeneralPlot").style.display = "block";
+                    }
+                    if (data.plot_best_2_subject) {
+                        document.getElementById("subjectBest2Plot").src = "data:image/png;base64," + data.plot_best_2_subject;
+                        document.getElementById("subjectBest2Plot").style.display = "block";
+                    }
+                });
+            } else {
+                document.getElementById("subjectGeneralPlot").style.display = "none";
+                document.getElementById("subjectBest2Plot").style.display = "none";
+            }
+        });
+    </script>
+</body>
+
+</html>
