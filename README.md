@@ -16,7 +16,7 @@ From the woring director, run:
 
 `docker compose up -d`
 
-Nagigate to `https//localhost:5000/dashboard`
+Navigate to `https//localhost:5000/dashboard`
 
 Errors:
 
