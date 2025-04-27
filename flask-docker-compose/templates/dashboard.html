@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <h1 class="text-center mb-2">Dashboard</h1>
+    
+    <div class="mt-2 mb-4 text-center">
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+            <select id="sectionSelector" class="form-select mb-4 p-2">
+                <option value="summary">Summary</option>
+                <option value="subject_data_categories">Subject Data Categories</option>
+                <option value="lowest_thresholds">Lowest Thresholds</option>
+                <option value="overall_average">Overall Average</option>
+                <option value="average_per_subject">Average Per Subject</option>
+                <option value="effects_of_metadata">Effects of Metadata</option>
+            </select>
+            </div>
+        </div>
+    </div>
+
+    
+
+    {% with sid="summary" %}
+    <div id="{{ sid }}" class="section" style="display: none;">
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h3>Summary</h3>
+                <p>This study investigates how signal uncertainty affects the detection of simple and complex visual patterns. Participants completed a two-interval forced-choice task, detecting either sinusoidal gratings or band-limited noise textures. Signal uncertainty was manipulated by presenting either a single signal type or one of five variations per trial. Additionally, noise was either fixed across trials or varied.</p>
+                <p>Contrast thresholds were measured to assess detection performance under these conditions, providing insight into how uncertainty influences the perception of structured and complex patterns.</p>
+                <div class="mb-5"></div>
+            </div>
+        </div>
+        <div hidden>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card shadow-sm p-4">
+                        <h5 class="card-title text-center">Vertical Bar Chart</h5>
+                        <canvas id="bar_chart_{{ sid }}"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm p-4">
+                        <h5 class="card-title text-center">Horizontal Bar Chart</h5>
+                        <canvas id="hbar_chart_{{ sid }}"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card shadow-sm p-4">
+                        <h5 class="card-title text-center">Pie Chart</h5>
+                        <canvas id="pie_chart_{{ sid }}"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+
+
+    {% with sid="subject_data_categories" %}
+    <div id="{{ sid }}" class="section" style="display: none;">
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h3>Subject Categories Based on Gender, Visual Acuity and Handedness.</h3>
+                <p>Here, the participants have been categorised based on some of their metadata. This is to further analyse, later in the page, if they have any effect on their performance of the experiment.</p>
+                <div class="mb-5"></div>
+            </div>
+        </div>
+
+
+        {% with cid="gender_table" %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                {{ tables.gender_table | safe }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+        {% with cid="handedness_table" %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                {{ tables.handedness_table | safe }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+        {% with cid="age_table" %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                {{ tables.age_table | safe }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+        {% with cid="acuity_table" %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                {{ tables.acuity_table | safe }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+    </div>
+    {% endwith %}
+
+
+    {% with sid="lowest_thresholds" %}
+    <div id="{{ sid }}" class="section" style="display: none;">
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h3>Subjects with the Lowest Thresholds</h3>
+                <p>Here, I have graphed the average thresholds of the subjects with the lowest thresholds in the entire study. Something to note, these exlude the subjects that had only run through the experiment once in one noice condition as opposed to the required two in two consequtive days.</p>
+                <div class="mb-5"></div>
+            </div>
+        </div>
+
+        {% with cid="lowest_thresholds" %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                {{ tables.lowest_thresholds | safe }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+    </div>
+    {% endwith %}
+
+
+    {% with sid="overall_average" %}
+    <div id="{{ sid }}" class="section" style="display: none;">
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h3>Overall Average Thresholds
+                </h3>
+                <p>Here is the threshold of all 21 subjects, based on 3 grating stimulus at grating = 1 (one grating used throughout), 3 grating stimulus at grating = 5 (one random out 5 each block), 3 tetxure stimulus at grating = 1 (one grating used throughout), 3 texture stimulus at grating = 5 (one random out 5 each block), all of the above when the noise condition is fixed and again when it is fixed.</p>
+                <p>There is the overall plot and then the best 2 out of 3 for each condition.</p>
+                <div class="mb-5"></div>
+            </div>
+        </div>
+
+        {% with cid="overall_avg" %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                {{ tables.overall_avg | safe }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+        
+        {% with cid="best_2_avg" %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                {{ tables.best_2_avg | safe }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+    </div>
+    {% endwith %}
+
+
+    {% with sid="average_per_subject" %}
+    <div id="{{ sid }}" class="section" style="display: none;">
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h3>Average threshold Specific to Subjects</h3>
+                <p>Here, there is the list of thresholds specific to each subject, based on their data. Additionally, there is also a list to reflect their best 2 of 3 thresholds.</p>
+                <div class="mb-5"></div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Vertical Bar Chart</h5>
+                    <canvas id="bar_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+    
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Horizontal Bar Chart</h5>
+                    <canvas id="hbar_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Pie Chart</h5>
+                    <canvas id="pie_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+
+
+    {% with sid="effects_of_metadata" %}
+    <div id="{{ sid }}" class="section" style="display: none;">
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h3>Analysing If Metadata Has Any Effects On Thresholds</h3>
+                <p>There is a theory that factors such as handedness can effect the way we percieve things, that is to say that it may have a role in the strategies in place for interpreting or understanding the things we see.</p>
+                <p>For the first section of this part, I will use the standard acceptable visual acuity score, which is 20/20. I will compare the average threshold of subjects with a lower visual acuity, against the average threshold of subjects with an exact or higher. Similarly, for the second section, I will measure the the average threshold of subjects that are left handed against the average threshold of subjects that are right handed. The number varies rather widely however, 13 right handed and 5 left handed, so I wiil only use the top 3 of each.</p>
+                <div class="mb-5"></div>
+            </div>
+        </div>
+
+        {% with cid="acuity_counts" %}
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Possible Effect of Visual Acuity</h5>
+                    <canvas id="bar_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Possible Effect of Visual Acuity</h5>
+                    <canvas id="hbar_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Possible Effect of Visual Acuity</h5>
+                    <canvas id="pie_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+        {% with cid="handedness_counts" %}
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Possible Effect of Visual Acuity</h5>
+                    <canvas id="bar_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Possible Effect of Visual Acuity</h5>
+                    <canvas id="hbar_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card shadow-sm p-4">
+                    <h5 class="card-title text-center">Possible Effect of Visual Acuity</h5>
+                    <canvas id="pie_chart_{{ sid }}"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+    </div>
+    {% endwith %}
+
+
+
+</div>
+
+<script>
+
+const overallAvg = JSON.parse('{{ dataframes.overall_avg | tojson }}');
+const overallAvgFixed = JSON.parse('{{ dataframes.overall_avg_fixed | tojson }}');
+const overallAvgVariable = JSON.parse('{{ dataframes.overall_avg_variable | tojson }}');
+const best2Avg = JSON.parse('{{ dataframes.best_2_avg | tojson }}');
+const best2AvgFixed = JSON.parse('{{ dataframes.best_2_avg_fixed | tojson }}');
+const best2AvgVariable = JSON.parse('{{ dataframes.best_2_avg_variable | tojson }}');
+const genderTable = JSON.parse('{{ dataframes.gender_table | tojson }}');
+const ageTable = JSON.parse('{{ dataframes.age_table | tojson }}');
+const lowestThresholds = JSON.parse('{{ dataframes.lowest_thresholds | tojson }}');
+const handednessTable = JSON.parse('{{ dataframes.handedness_table | tojson }}');
+const acuityTable = JSON.parse('{{ dataframes.acuity_table | tojson }}');
+const acuityCounts = JSON.parse('{{ dataframes.acuity_counts | tojson }}');
+const handednessCounts = JSON.parse('{{ dataframes.handedness_counts | tojson }}');
+
+
+const allColors = getColors();
+
+const chartData = {
+    overall_avg: {
+        title: "Overall Average",
+        axes: {
+            keys: ["stimulus", "nStim", "noise"],
+            value: "threshold",
+        },
+        data: overallAvg,
+        ctx: {
+            labels: [
+                    "Grating nStim = 1",
+                    "Grating nStim = 5",
+                    "Texture nStim = 1",
+                    "Texture nStim = 5",
+            ],
+            datasets: [
+                {
+                    label: "Fixed Noise",
+                    data: overallAvgFixed.map((r) => r.threshold),
+                    backgroundColor: allColors[0],
+                    borderColor: allColors[0],
+                    borderWidth: 1
+                },
+                {
+                    label: "Variable Noise",
+                    data: overallAvgVariable.map((r) => r.threshold),
+                    backgroundColor: allColors[1],
+                    borderColor: allColors[1],
+                    borderWidth: 1
+                }
+            ],
+        },
+    },
+    best_2_avg: {
+        title: "Best 2 of 3 Average",
+        axes: {
+            keys: ["stimulus", "nStim", "noise"],
+            value: "threshold",
+        },
+        data: best2Avg,
+        ctx: {
+            labels: [
+                    "Grating nStim = 1",
+                    "Grating nStim = 5",
+                    "Texture nStim = 1",
+                    "Texture nStim = 5",
+                ],
+            datasets: [
+                {
+                    label: "Fixed Noise",
+                    data: best2AvgFixed.map((r) => r.threshold),
+                    backgroundColor: allColors[0],
+                    borderColor: allColors[0],
+                    borderWidth: 1
+                },
+                {
+                    label: "Variable Noise",
+                    data: best2AvgVariable.map((r) => r.threshold),
+                    backgroundColor: allColors[1],
+                    borderColor: allColors[1],
+                    borderWidth: 1
+                }
+            ],
+        },
+    },
+    lowest_thresholds: {
+        title: "Lowest Threshold",
+        axes: {
+            keys: ["subject"],
+            value: "threshold",
+        },
+        data: lowestThresholds,
+        ctx: {
+            labels: lowestThresholds.map((r) => r.subject),
+            datasets: [
+                {
+                    label: "Lowest Threshold",
+                    data: lowestThresholds.map((r) => r.threshold),
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+            ],
+        },
+    },
+    gender_table: {
+        title: "Gender Distribution",
+        axes: {
+            keys: ["Gender"],
+            value: "Count",
+        },
+        data: genderTable,
+        ctx: {
+            labels: genderTable.map((r) => r.Gender),
+            datasets: [
+                {
+                    label: "Gender",
+                    data: genderTable.map((r) => r["Count"]),
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+            ],
+        },
+    },
+    age_table: {
+        title: "Age Distribution",
+        axes: {
+            keys: ["Age Group"],
+            value: "Count",
+        },
+        data: ageTable,
+        ctx: {
+            labels: ageTable.map((r) => r["Age Group"]),
+            datasets: [
+                {
+                    label: "Age Group",
+                    data: ageTable.map((r) => r["Count"]),
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+            ],
+        },
+    },
+    handedness_table: {
+        title: "Handedness Distribution",
+        axes: {
+            keys: ["Handedness"],
+            value: "Count",
+        },
+        data: handednessTable,
+        ctx: {
+            labels: handednessTable.map((r) => r["Handedness"]),
+            datasets: [
+                {
+                    label: "Handedness",
+                    data: handednessTable.map((r) => r["Count"]),
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+            ],
+        },
+    },
+    acuity_table: {
+        title: "Acuity Distribution",
+        axes: {
+            keys: ["Visual Acuity"],
+            value: "Count",
+        },
+        data: acuityTable,
+        ctx: {
+            labels: acuityTable.map((r) => r["Visual Acuity"]),
+            datasets: [
+                {
+                    label: "Visual Acuity",
+                    data: acuityTable.map((r) => r["Count"]),
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+            ],
+        },
+    },
+    acuity_counts: {
+        title: "Acuity Counts",
+        axes: {
+            keys: ["Acuity Category"],
+            value: "Subject Count",
+        },
+        data: acuityCounts,
+        ctx: {
+            labels: acuityCounts.map((r) => r["Acuity Category"]),
+            datasets: [
+                {
+                    label: "Acuity Category",
+                    data: acuityCounts.map((r) => r["Subject Count"]),
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+            ],
+        },
+    },
+    handedness_counts: {
+        title: "Handedness Counts",
+        axes: {
+            keys: ["Handedness"],
+            value: "Subject Count",
+        },
+        data: handednessCounts,
+        ctx: {
+            labels: handednessCounts.map((r) => r["Handedness"]),
+            datasets: [
+                {
+                    label: "Handedness",
+                    data: handednessCounts.map((r) => r["Subject Count"]),
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+            ],
+        },
+    },
+};
+// console.log(chartData);
+
+
+Object.keys(chartData).forEach(function(key){
+    makeBarChart(key);
+    makeHBarChart(key);
+    makePieChart(key);
+})
+
+
+
+function makeBarChart(code=null) {
+    // Vertical Bar Chart
+    const dom = document.getElementById(`bar_chart_${code}`)
+    if (!dom) { return }
+    const ctxVertical = dom.getContext('2d');
+
+    ctxData = chartData?.[code]; // makeCtxData(code)
+    if (!ctxData) { return }
+
+    const c = ctxData.ctx.labels.length;
+    colors = getColors()[0];
+    datasets = JSON.parse(JSON.stringify(ctxData?.ctx?.datasets))
+    if (datasets.length == 1) {
+        datasets.map((ds) => {
+            ds.backgroundColor = colors;
+            ds.borderColor = colors;
+        })
+    }
+
+    new Chart(ctxVertical, {
+        type: 'bar',
+        data: {
+            labels: ctxData?.ctx?.labels,
+            datasets: datasets,
+        },
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+}
+
+function makeHBarChart(code=null) {
+    // Horizontal Bar Chart
+    const dom = document.getElementById(`hbar_chart_${code}`)
+    if (!dom) { return }
+    const ctxHorizontal = dom.getContext('2d');
+
+    ctxData = chartData?.[code]; // makeCtxData(code)
+    if (!ctxData) { return }
+
+    const c = ctxData.ctx.labels.length;
+    colors = getColors()[1];
+    datasets = JSON.parse(JSON.stringify(ctxData?.ctx?.datasets))
+    if (datasets.length == 1) {
+        datasets.map((ds) => {
+            ds.backgroundColor = colors;
+            ds.borderColor = colors;
+        })
+    }
+
+    new Chart(ctxHorizontal, {
+        type: 'bar',
+        data: {
+            labels: ctxData?.ctx?.labels,
+            datasets: datasets,
+        },
+        options: {
+            indexAxis: 'y', // <-- This makes it horizontal
+            scales: { x: { beginAtZero: true } }
+        }
+    });
+}
+
+function makePieChart(code=null) {
+    // Pie Chart
+    const dom = document.getElementById(`pie_chart_${code}`)
+    if (!dom) { return }
+    const ctxPie = dom.getContext('2d');
+
+    ctxData = chartData?.[code]; // makeCtxData(code)
+    if (!ctxData) { return }
+
+    const c = ctxData.ctx.labels.length;
+    colors = getColors().slice(0, c);
+    datasets = JSON.parse(JSON.stringify(ctxData?.ctx?.datasets))
+    datasets.map((ds) => {
+        ds.backgroundColor = colors;
+        ds.borderColor = colors;
+    })
+
+    const chartConfig = {
+        type: 'doughnut',
+        data: {
+            labels: ctxData?.ctx?.labels,
+            datasets: datasets,
+        },
+        options: {
+        }
+    }
+
+
+
+    new Chart(ctxPie, chartConfig);
+
+    /*
+    labels: ctxData.labels,
+    datasets: [{
+        label: 'Colors',
+        data: ctxData.values,
+        backgroundColor: colors,
+        borderColor: colors,
+        borderWidth: 1
+    }]
+    */
+
+}
+
+
+function makeCtxData(code=null) {
+    if (!code) { return }
+    title = 'Votes';
+    labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
+    values = [12, 19, 3, 5, 2, 3];
+    colors = [
+    'rgba(255, 99, 132, 0.7)',    // red-pink
+    'rgba(54, 162, 235, 0.7)',    // blue
+    'rgba(255, 206, 86, 0.7)',    // yellow
+    ]
+    unitLabel = 'Votes';
+
+    const chartColors = getColors();
+    
+    const node = chartData?.[code];
+    const data = node?.data;
+    const axes = node.axes;
+    
+    if (data) {
+        values = []
+        labels = []
+        colors = []
+        data.forEach(function(row, r) {
+            axesKey = ""
+            axes.keys.forEach(function (kv) {
+                if (axesKey.length > 0) {
+                    axesKey += "-"
+                }
+                axesKey += row[kv];
+            })
+            labels.push(axesKey);
+            values.push(row[axes.value]);
+            colors.push(chartColors[r]);
+        })
+        unitLabel = axesKey;
+    }
+
+    return {
+        title: title,
+        labels: labels,
+        values: values,
+        colors: colors,
+        unitLabel: unitLabel,
+    }
+
+}
+
+
+function getColors() {
+    return [
+    'rgba(255, 99, 132, 0.7)',    // red-pink
+    'rgba(54, 162, 235, 0.7)',    // blue
+    'rgba(255, 206, 86, 0.7)',    // yellow
+    'rgba(75, 192, 192, 0.7)',    // teal
+    'rgba(153, 102, 255, 0.7)',   // purple
+    'rgba(255, 159, 64, 0.7)',    // orange
+    'rgba(199, 199, 199, 0.7)',   // gray
+    'rgba(255, 99, 255, 0.7)',    // pink
+    'rgba(99, 255, 132, 0.7)',    // light green
+    'rgba(255, 220, 99, 0.7)',    // light orange
+    'rgba(99, 132, 255, 0.7)',    // soft blue
+    'rgba(235, 54, 162, 0.7)',    // magenta
+    'rgba(86, 255, 206, 0.7)',    // aqua
+    'rgba(192, 75, 192, 0.7)',    // violet
+    'rgba(102, 153, 255, 0.7)'    // sky blue
+    ]
+}
+
+
+
+</script>
+
+
+<script>
+    // JavaScript to handle select change
+    const selector = document.getElementById('sectionSelector');
+    const sections = document.querySelectorAll('.section');
+    
+    // function to show selected section and hide others
+    function showSection() {
+        const selectedValue = selector.value;
+    
+        sections.forEach(section => {
+            if (section.id === selectedValue) {
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
+        });
+    }
+    
+    // Listen for changes
+    selector.addEventListener('change', showSection);
+    
+    // Show the first section on page load
+    window.addEventListener('DOMContentLoaded', (event) => {
+        showSection();
+    });
+    </script>
+
+</body>
+</html>
