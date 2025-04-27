@@ -45,13 +45,13 @@
                 <div class="col-md-6">
                     <div class="card shadow-sm p-4">
                         <h5 class="card-title text-center">Vertical Bar Chart</h5>
-                        <canvas id="bar_chart_{{ sid }}"></canvas>
+                        <div><canvas id="bar_chart_{{ sid }}"></canvas></div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="card shadow-sm p-4">
                         <h5 class="card-title text-center">Horizontal Bar Chart</h5>
-                        <canvas id="hbar_chart_{{ sid }}"></canvas>
+                        <div><canvas id="hbar_chart_{{ sid }}"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                 <div class="col-md-6 offset-md-3">
                     <div class="card shadow-sm p-4">
                         <h5 class="card-title text-center">Pie Chart</h5>
-                        <canvas id="pie_chart_{{ sid }}"></canvas>
+                        <div><canvas id="pie_chart_{{ sid }}"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
         {% with cid="gender_table" %}
         <div class="row mb-4">
             <div class="col-md-6 mx-auto">
-                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                <h5 id="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
                 {{ tables.gender_table | safe }}
             </div>
             <div class="col-md-6 mb-4">
@@ -107,7 +107,7 @@
         {% with cid="handedness_table" %}
         <div class="row mb-4">
             <div class="col-md-6 mx-auto">
-                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                <h5 id="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
                 {{ tables.handedness_table | safe }}
             </div>
             <div class="col-md-6 mb-4">
@@ -132,7 +132,7 @@
         {% with cid="age_table" %}
         <div class="row mb-4">
             <div class="col-md-6 mx-auto">
-                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                <h5 id="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
                 {{ tables.age_table | safe }}
             </div>
             <div class="col-md-6 mb-4">
@@ -157,7 +157,7 @@
         {% with cid="acuity_table" %}
         <div class="row mb-4">
             <div class="col-md-6 mx-auto">
-                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                <h5 id="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
                 {{ tables.acuity_table | safe }}
             </div>
             <div class="col-md-6 mb-4">
@@ -196,7 +196,7 @@
         {% with cid="lowest_thresholds" %}
         <div class="row mb-4">
             <div class="col-md-6 mx-auto">
-                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                <h5 id="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
                 {{ tables.lowest_thresholds | safe }}
             </div>
             <div class="col-md-6 mb-4">
@@ -237,7 +237,7 @@
         {% with cid="overall_avg" %}
         <div class="row mb-4">
             <div class="col-md-6 mx-auto">
-                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                <h5 id="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
                 {{ tables.overall_avg | safe }}
             </div>
             <div class="col-md-6 mb-4">
@@ -262,7 +262,7 @@
         {% with cid="best_2_avg" %}
         <div class="row mb-4">
             <div class="col-md-6 mx-auto">
-                <h5 title="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
+                <h5 id="title_{{ cid }}" class="mb-3">Possible Effect of Visual Acuity</h5>
                 {{ tables.best_2_avg | safe }}
             </div>
             <div class="col-md-6 mb-4">
@@ -294,33 +294,89 @@
             <div class="col-md-6 mx-auto">
                 <h3>Average threshold Specific to Subjects</h3>
                 <p>Here, there is the list of thresholds specific to each subject, based on their data. Additionally, there is also a list to reflect their best 2 of 3 thresholds.</p>
+
+                <div class="mt-2 mb-4 text-center">
+                    <div class="row mb-4">
+                        <div class="col-md-6 mx-auto">
+                            <select id="subjectDropdown" class="form-select mb-4 p-2">
+                                <option value="">Select a Subject</option>
+                                {% for subject in subjects %}
+                                    <option value="{{ subject }}">{{ subject }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="chart-container" hidden>
+                    <h3>General Thresholds</h3>
+                    <div id="subjectGeneralPlot" src="" alt="Subject General Plot" style="display:none;">
+                        <canvas id="bar_chart_{{ cid }}"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container" hidden>
+                    <h3>Best 2 of 3 Thresholds</h3>
+                    <div id="subjectBest2Plot" src="" alt="Subject Best 2 of 3 Plot" style="display:none;">
+                        <canvas id="bar_chart_{{ cid }}"></canvas>
+                    </div>
+                </div>
+
                 <div class="mb-5"></div>
             </div>
         </div>
+
+
+        {% with cid="subject_avg" %}
         <div class="row mb-4">
-            <div class="col-md-6">
+            <div class="col-md-6 mx-auto">
+                <h5 id="title_{{ cid }}" class="mb-3"></h5>
+                <div id="table_{{ cid }}">{{ tables.subject_overall_avg | safe }}</div>
+            </div>
+            <div class="col-md-6 mb-4">
                 <div class="card shadow-sm p-4">
-                    <h5 class="card-title text-center">Vertical Bar Chart</h5>
-                    <canvas id="bar_chart_{{ sid }}"></canvas>
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
                 </div>
             </div>
-    
-            <div class="col-md-6">
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
                 <div class="card shadow-sm p-4">
-                    <h5 class="card-title text-center">Horizontal Bar Chart</h5>
-                    <canvas id="hbar_chart_{{ sid }}"></canvas>
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
                 </div>
             </div>
         </div>
-    
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
+        {% endwith %}
+        
+        {% with cid="subject_best_2_avg" %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <h5 id="title_{{ cid }}" class="mb-3"></h5>
+                <div id="table_{{ cid }}">{{ tables.subject_best_2_avg | safe }}</div>
+            </div>
+            <div class="col-md-6 mb-4">
                 <div class="card shadow-sm p-4">
-                    <h5 class="card-title text-center">Pie Chart</h5>
-                    <canvas id="pie_chart_{{ sid }}"></canvas>
+                    <canvas id="bar_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4"></div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="pie_chart_{{ cid }}"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm p-4">
+                    <canvas id="hbar_chart_{{ cid }}"></canvas>
                 </div>
             </div>
         </div>
+        {% endwith %}
+
+
     </div>
     {% endwith %}
 
@@ -419,8 +475,8 @@ const chartData = {
             keys: ["stimulus", "nStim", "noise"],
             value: "threshold",
         },
-        data: overallAvg,
-        ctx: {
+        ctx: null,
+        data: {
             labels: [
                     "Grating nStim = 1",
                     "Grating nStim = 5",
@@ -451,8 +507,8 @@ const chartData = {
             keys: ["stimulus", "nStim", "noise"],
             value: "threshold",
         },
-        data: best2Avg,
-        ctx: {
+        ctx: null,
+        data: {
             labels: [
                     "Grating nStim = 1",
                     "Grating nStim = 5",
@@ -483,8 +539,8 @@ const chartData = {
             keys: ["subject"],
             value: "threshold",
         },
-        data: lowestThresholds,
-        ctx: {
+        ctx: null,
+        data: {
             labels: lowestThresholds.map((r) => r.subject),
             datasets: [
                 {
@@ -503,8 +559,8 @@ const chartData = {
             keys: ["Gender"],
             value: "Count",
         },
-        data: genderTable,
-        ctx: {
+        ctx: null,
+        data: {
             labels: genderTable.map((r) => r.Gender),
             datasets: [
                 {
@@ -523,8 +579,8 @@ const chartData = {
             keys: ["Age Group"],
             value: "Count",
         },
-        data: ageTable,
-        ctx: {
+        ctx: null,
+        data: {
             labels: ageTable.map((r) => r["Age Group"]),
             datasets: [
                 {
@@ -543,8 +599,8 @@ const chartData = {
             keys: ["Handedness"],
             value: "Count",
         },
-        data: handednessTable,
-        ctx: {
+        ctx: null,
+        data: {
             labels: handednessTable.map((r) => r["Handedness"]),
             datasets: [
                 {
@@ -563,8 +619,8 @@ const chartData = {
             keys: ["Visual Acuity"],
             value: "Count",
         },
-        data: acuityTable,
-        ctx: {
+        ctx: null,
+        data: {
             labels: acuityTable.map((r) => r["Visual Acuity"]),
             datasets: [
                 {
@@ -583,8 +639,8 @@ const chartData = {
             keys: ["Acuity Category"],
             value: "Subject Count",
         },
-        data: acuityCounts,
-        ctx: {
+        ctx: null,
+        data: {
             labels: acuityCounts.map((r) => r["Acuity Category"]),
             datasets: [
                 {
@@ -603,8 +659,8 @@ const chartData = {
             keys: ["Handedness"],
             value: "Subject Count",
         },
-        data: handednessCounts,
-        ctx: {
+        ctx: null,
+        data: {
             labels: handednessCounts.map((r) => r["Handedness"]),
             datasets: [
                 {
@@ -618,29 +674,35 @@ const chartData = {
         },
     },
 };
-// console.log(chartData);
 
 
-Object.keys(chartData).forEach(function(key){
+Object.keys(chartData).forEach(function(key){ createCharts(key); })
+
+
+function createCharts(key=null) {
     makeBarChart(key);
     makeHBarChart(key);
     makePieChart(key);
-})
-
+}
 
 
 function makeBarChart(code=null) {
     // Vertical Bar Chart
-    const dom = document.getElementById(`bar_chart_${code}`)
+    dom = document.getElementById(`bar_chart_${code}`)
     if (!dom) { return }
-    const ctxVertical = dom.getContext('2d');
+    
+    ctxVertical = dom.getContext('2d');
+
+    // Check and destroy old chart
+    // if (ctxVertical.canvas.chartInstance) { ctxVertical.canvas.chartInstance.destroy(); }
+    if(window[`bar_chart_${code}`] instanceof Chart) { window[`bar_chart_${code}`].destroy(); }
 
     ctxData = chartData?.[code]; // makeCtxData(code)
     if (!ctxData) { return }
 
-    const c = ctxData.ctx.labels.length;
+    const c = ctxData.data.labels.length;
     colors = getColors()[0];
-    datasets = JSON.parse(JSON.stringify(ctxData?.ctx?.datasets))
+    datasets = JSON.parse(JSON.stringify(ctxData?.data?.datasets))
     if (datasets.length == 1) {
         datasets.map((ds) => {
             ds.backgroundColor = colors;
@@ -648,30 +710,44 @@ function makeBarChart(code=null) {
         })
     }
 
-    new Chart(ctxVertical, {
+    chartConfig = {
         type: 'bar',
         data: {
-            labels: ctxData?.ctx?.labels,
+            labels: ctxData?.data?.labels,
             datasets: datasets,
         },
         options: {
             scales: { y: { beginAtZero: true } }
         }
-    });
+    }
+
+    dom.parentNode.innerHTML = `<canvas id='bar_chart_${code}'></canvas>`
+    dom = document.getElementById(`bar_chart_${code}`)
+    ctxVertical = dom.getContext('2d');
+
+    ctx = new Chart(ctxVertical, chartConfig);
+    ctxData.ctx = ctx;
 }
 
 function makeHBarChart(code=null) {
     // Horizontal Bar Chart
-    const dom = document.getElementById(`hbar_chart_${code}`)
+    dom = document.getElementById(`hbar_chart_${code}`)
     if (!dom) { return }
-    const ctxHorizontal = dom.getContext('2d');
+
+    ctxHorizontal = dom.getContext('2d');
+
+    // Check and destroy old chart
+    // if (ctxHorizontal.canvas.chartInstance) { ctxHorizontal.canvas.chartInstance.destroy(); }
+    if(window[`hbar_chart_${code}`] instanceof Chart) { window[`hbar_chart_${code}`].destroy(); }
+
+
 
     ctxData = chartData?.[code]; // makeCtxData(code)
     if (!ctxData) { return }
 
-    const c = ctxData.ctx.labels.length;
+    const c = ctxData.data.labels.length;
     colors = getColors()[1];
-    datasets = JSON.parse(JSON.stringify(ctxData?.ctx?.datasets))
+    datasets = JSON.parse(JSON.stringify(ctxData?.data?.datasets))
     if (datasets.length == 1) {
         datasets.map((ds) => {
             ds.backgroundColor = colors;
@@ -679,31 +755,39 @@ function makeHBarChart(code=null) {
         })
     }
 
-    new Chart(ctxHorizontal, {
+    chartConfig = {
         type: 'bar',
         data: {
-            labels: ctxData?.ctx?.labels,
+            labels: ctxData?.data?.labels,
             datasets: datasets,
         },
         options: {
             indexAxis: 'y', // <-- This makes it horizontal
             scales: { x: { beginAtZero: true } }
         }
-    });
+    }
+
+    dom.parentNode.innerHTML = `<canvas id='hbar_chart_${code}'></canvas>`
+    dom = document.getElementById(`hbar_chart_${code}`)
+    ctxHorizontal = dom.getContext('2d');
+
+    ctx = new Chart(ctxHorizontal, chartConfig);
+    ctxData.ctx = ctx;
 }
 
 function makePieChart(code=null) {
     // Pie Chart
-    const dom = document.getElementById(`pie_chart_${code}`)
+    dom = document.getElementById(`pie_chart_${code}`)
     if (!dom) { return }
-    const ctxPie = dom.getContext('2d');
+
+    ctxPie = dom.getContext('2d');
 
     ctxData = chartData?.[code]; // makeCtxData(code)
     if (!ctxData) { return }
 
-    const c = ctxData.ctx.labels.length;
+    const c = ctxData.data.labels.length;
     colors = getColors().slice(0, c);
-    datasets = JSON.parse(JSON.stringify(ctxData?.ctx?.datasets))
+    datasets = JSON.parse(JSON.stringify(ctxData?.data?.datasets))
     datasets.map((ds) => {
         ds.backgroundColor = colors;
         ds.borderColor = colors;
@@ -712,7 +796,7 @@ function makePieChart(code=null) {
     const chartConfig = {
         type: 'doughnut',
         data: {
-            labels: ctxData?.ctx?.labels,
+            labels: ctxData?.data?.labels,
             datasets: datasets,
         },
         options: {
@@ -720,8 +804,12 @@ function makePieChart(code=null) {
     }
 
 
+    dom.parentNode.innerHTML = `<canvas id='pie_chart_${code}'></canvas>`
+    dom = document.getElementById(`pie_chart_${code}`)
+    ctxPie = dom.getContext('2d');
 
-    new Chart(ctxPie, chartConfig);
+    ctx = new Chart(ctxPie, chartConfig);
+    ctxData.ctx = ctx;
 
     /*
     labels: ctxData.labels,
@@ -806,7 +894,6 @@ function getColors() {
 }
 
 
-
 </script>
 
 
@@ -828,6 +915,96 @@ function getColors() {
         });
     }
     
+    document.getElementById("subjectDropdown")
+            .addEventListener("change", function() {
+
+                var subject = this.value;
+
+                const subjectTileDom = document.getElementById("title_subject_avg");
+                const subjectBestTitle2Dom = document.getElementById("title_subject_best_2_avg");
+                const subjectTableDom = document.getElementById("table_subject_avg");
+                const subjectBest2TableDom = document.getElementById("table_subject_best_2_avg");
+
+                if (subject) {
+                    fetch(`/subject/${subject}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.subject_avg_title && subjectTileDom) { subjectTileDom.innerHTML = data.subject_avg_title; }
+                        if (data.subject_best_2_title && subjectBestTitle2Dom) { subjectBestTitle2Dom.innerHTML = data.subject_best_2_title; }
+
+                        if (data.subject_avg_html && subjectTableDom) { subjectTableDom.innerHTML = data.subject_avg_html }
+                        if (data.subject_best_2_html && subjectBest2TableDom) { subjectBest2TableDom.innerHTML = data.subject_best_2_html }
+
+                        // chartData["subject_avg"] = data.subject_avg
+                        // chartData["subject_best_2_avg"] = data.subject_best_2_avg
+
+                        labels = [
+                                    "Grating nStim = 1",
+                                    "Grating nStim = 5",
+                                    "Texture nStim = 1",
+                                    "Texture nStim = 5",
+                                    ];
+
+                        chartData["subject_avg"] = {
+                            title: `${data.subject_avg_title}`,
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: "Fixed Noise",
+                                        data: data.subject_avg_fixed.map((r) => r.threshold),
+                                        backgroundColor: allColors[0],
+                                        borderColor: allColors[0],
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: "Variable Noise",
+                                        data: data.subject_avg_variable.map((r) => r.threshold),
+                                        backgroundColor: allColors[1],
+                                        borderColor: allColors[1],
+                                        borderWidth: 1
+                                    }
+                                ],
+                            },
+                        };
+                        chartData["subject_best_2_avg"] = {
+                            title: `${data.subject_avg_title}`,
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: "Fixed Noise",
+                                        data: data.subject_best_2_fixed.map((r) => r.threshold),
+                                        backgroundColor: allColors[0],
+                                        borderColor: allColors[0],
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: "Variable Noise",
+                                        data: data.subject_best_2_variable.map((r) => r.threshold),
+                                        backgroundColor: allColors[1],
+                                        borderColor: allColors[1],
+                                        borderWidth: 1
+                                    }
+                                ],
+                            },
+                        };
+
+                        if (data.subject_avg) { createCharts("subject_avg"); }
+                        if (data.subject_best_2_avg) { createCharts("subject_best_2_avg"); }
+
+                        // document.getElementById("subjectGeneralPlot").src = "data:image/png;base64," + data.plot_subject;
+                        // document.getElementById("subjectGeneralPlot").style.display = "block";
+                        // document.getElementById("subjectBest2Plot").src = "data:image/png;base64," + data.plot_best_2_subject;
+                        // document.getElementById("subjectBest2Plot").style.display = "block";
+
+                    });
+                } else {
+                    // document.getElementById("subjectGeneralPlot").style.display = "none";
+                    // document.getElementById("subjectBest2Plot").style.display = "none";
+                }
+    });
+
     // Listen for changes
     selector.addEventListener('change', showSection);
     

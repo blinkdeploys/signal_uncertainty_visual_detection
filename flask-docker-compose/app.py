@@ -94,6 +94,45 @@ def compute_subject_avg(df, subject):
 
 
 #handles when a subject is selected to load it, working with java in html
+@app.route("/subject/<subject>")
+def subject(subject):
+    df = load_data()
+    
+    if isinstance(df, str):  
+        return jsonify({"error": "Error loading data"}), 500
+    
+    subject_avg, subject_best_2_avg = compute_subject_avg(df, subject)
+    
+    if isinstance(subject_avg, dict):  
+        return jsonify(subject_avg), 404  # Return error if subject not found
+
+    subject_avg_fixed = subject_avg[subject_avg['noise'] == 'fixed']
+    subject_avg_variable = subject_avg[subject_avg['noise'] == 'variable']
+    subject_best_2_fixed = subject_best_2_avg[subject_best_2_avg['noise'] == 'fixed']
+    subject_best_2_variable = subject_best_2_avg[subject_best_2_avg['noise'] == 'variable']
+
+
+    #generating
+    # subject_avg = generate_avg_plot(subject_avg, f"Thresholds for {subject}")
+    # subject_best_2_avg = generate_avg_plot(best_2_avg, f"Best 2 of 3 Thresholds for {subject}")
+    
+    return jsonify({
+        "title": subject,
+        "subject_avg_title": f"Thresholds for {subject.upper()}",
+        "subject_best_2_title": f"Best 2 of 3 Thresholds for {subject.upper()}",
+        "subject_avg": subject_avg.to_dict(orient="records"),
+        "subject_best_2_avg": subject_best_2_avg.to_dict(orient="records"),
+
+        "subject_avg_fixed": subject_avg_fixed.to_dict(orient="records"),
+        "subject_avg_variable": subject_avg_variable.to_dict(orient="records"),
+        "subject_best_2_fixed": subject_best_2_fixed.to_dict(orient="records"),
+        "subject_best_2_variable": subject_best_2_variable.to_dict(orient="records"),
+
+        "subject_avg_html": subject_avg.to_html(classes='table table-stripped'),
+        "subject_best_2_html": subject_best_2_avg.to_html(classes='table table-stripped'),
+    })
+
+
 @app.route("/subject_plot/<subject>")
 def subject_plot(subject):
     df = load_data()
